@@ -116,7 +116,7 @@ def build_transforms(cfg, is_train=True, is_fake=False):
         if do_rea:
             # from timm.data.random_erasing import RandomErasing as RE
             # res.append(RE(probability=rea_prob, mode='pixel', max_count=1, device='cpu'))
-            from transforms import mixing_erasing
+            from .transforms import mixing_erasing
             res.append(mixing_erasing(probability=rea_prob, mode='pixel', type='soft'))
     else:
         size_test = cfg.INPUT.SIZE_TEST
