@@ -588,8 +588,8 @@ class build_attr_vit(nn.Module):
             if i in self.state_dict().keys():
                 if 'pos_embed' in i and param_dict[i].shape != self.base.pos_embed.shape:
                     stride = self.cfg.MODEL.STRIDE_SIZE
-                    input_size = self.cfg.INPUT.SIZE_TRAIN
-                    gs_old = [(i - 16) // stride + 1 for i in input_size]
+                    # input_size = self.cfg.INPUT.SIZE_TRAIN
+                    gs_old = [(i - 16) // stride + 1 for i in [256,128]]
                     param_dict[i] = self.base.resize_pos_embed(param_dict[i], self.base.pos_embed, self.base.patch_embed.num_y, self.base.patch_embed.num_x, gs_old if self.pretrain_choice=='self' and not self.base.stem_conv else None)
                 self.state_dict()[i].copy_(param_dict[i])
                 count += 1
