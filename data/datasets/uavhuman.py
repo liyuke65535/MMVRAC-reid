@@ -79,6 +79,12 @@ class UAVHuman(ImageDataset):
         """
 
     def _process_dir(self, dir_path, is_train=True):
+        dirty_imgs = {}
+        with open("/home/liyuke/data4/uavhuman-reid/old_new_name.json") as f:
+            objs = json.load(f)
+        for obj in objs:
+            dirty_imgs[obj['old_file_name']] = obj['new_file_name']
+
         img_paths = glob.glob(osp.join(dir_path, '*.jpg'))
 
         # pid and camid patterns
@@ -98,7 +104,12 @@ class UAVHuman(ImageDataset):
         pid_container = set()
         for img_path in img_paths:
             fname = osp.split(img_path)[-1]
-            if fname.startswith('D'):
+            if fname in dirty_imgs.keys():
+                if dirty_imgs[fname] == "":
+                    continue
+                pid_part1, pid_part2 = pattern_pid.search(dirty_imgs[fname]).groups()
+                pid = int(pid_part1 + pid_part2)
+            elif fname.startswith('D'):
                 # continue
                 pid = int(distractor_pid)
             else:
@@ -122,7 +133,14 @@ class UAVHuman(ImageDataset):
         dataset = []
         for img_path in img_paths:
             fname = osp.split(img_path)[-1]
-            if fname.startswith('D'):
+            if fname in dirty_imgs.keys():
+                if dirty_imgs[fname] == "":
+                    continue
+                pid_part1, pid_part2 = pattern_pid.search(dirty_imgs[fname]).groups()
+                pid = int(pid_part1 + pid_part2)
+                camid_part1, _, _, camid_part2 = pattern_camid.search(dirty_imgs[fname]).groups()
+                camid = int(camid_part1 + camid_part2)
+            elif fname.startswith('D'):
                 # continue
                 pid = int(distractor_pid)
                 camid = int(fname[-13:-8])
