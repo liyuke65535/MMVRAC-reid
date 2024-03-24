@@ -35,8 +35,8 @@ class UAVHuman(ImageDataset):
         train = self._process_dir(self.train_dir, is_train=True)
         
         # """Comment for Competition Splits
-        query = self._process_dir(self.query_dir, is_train=False)
-        gallery = self._process_dir(self.gallery_dir, is_train=False)
+        query = self._process_dir(self.query_dir, is_train=True)
+        gallery = self._process_dir(self.gallery_dir, is_train=True)
         # """
 
         # if verbose:
@@ -113,10 +113,10 @@ class UAVHuman(ImageDataset):
         # pid2label = {pid: label for label, pid in enumerate(pid_container)}
             
 
-        ###### predict attributes ######
-        with open("/home/liyuke/data4/uavhuman-reid/pre_test_attrs.json", 'r') as f:
-            pre_attrs = json.load(f)
-        ###### predict attributes ######
+        # ###### predict attributes ######
+        # with open("/home/liyuke/data4/uavhuman-reid/pre_test_attrs.json", 'r') as f:
+        #     pre_attrs = json.load(f)
+        # ###### predict attributes ######
 
         dataset = []
         for img_path in img_paths:
@@ -159,8 +159,8 @@ class UAVHuman(ImageDataset):
                     "lower_style": lower_style
                 }
             else:
-                # attributes = None
-                attributes = pre_attrs[img_path]
+                attributes = None
+                # attributes = pre_attrs[img_path]
             # if relabel: pid = pid2label[pid] # relabel in common.py
             dataset.append((img_path, pid, camid, attributes))
 

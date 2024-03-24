@@ -30,7 +30,7 @@ if __name__ == "__main__":
     # output_dir = os.path.join(cfg.LOG_ROOT, cfg.LOG_NAME)
     # if output_dir and not os.path.exists(output_dir):
     #     os.makedirs(output_dir)
-    output_dir = "/home/liyuke/data4/exp/vit_s8_b12_l16_swinb_1_1_1_1_ensemble"
+    output_dir = "/home/liyuke/data4/exp/vit_b12_ori_pre_ensemble"
     logger = setup_logger("reid", output_dir, if_train=False)
     logger.info(args)
 
@@ -41,18 +41,20 @@ if __name__ == "__main__":
             logger.info(config_str)
     logger.info("Running with config:\n{}".format(cfg))
 
-    os.environ['CUDA_VISIBLE_DEVICES'] = '6'
+    os.environ['CUDA_VISIBLE_DEVICES'] = '4'
 
     model_vitb = build_attr_vit(619, cfg, 'attr_vit_base_patch16_224_TransReID', stride_size=12, model_path="/home/liyuke/data4/exp/attr_vit_b12_rea_256x128_centerLoss_lr1e-2/attr_vit_best.pth")
-    model_vitl = build_attr_vit(619, cfg, 'attr_vit_large_patch16_224_TransReID', stride_size=16, model_path="/home/liyuke/data4/exp/attr_vit_l16_rea_256x128_centerLoss_adamw3.5e-5/attr_vit_best.pth")
-    model_vits = build_attr_vit(619, cfg, 'attr_vit_small_patch16_224_TransReID', stride_size=8, model_path="/home/liyuke/data4/exp/attr_vit_s16_rea_256x128_centerLoss_lr1e-2/attr_vit_best.pth")
+    model_vitb_pretrained = build_attr_vit(619, cfg, 'attr_vit_base_patch16_224_TransReID', stride_size=12, model_path="/home/liyuke/data4/exp/vit_multi_source_b12_rea_256x128_centerLoss_lr1e-2/vit_best.pth", pretrain_choice='self')
+    # model_vitl = build_attr_vit(619, cfg, 'attr_vit_large_patch16_224_TransReID', stride_size=16, model_path="/home/liyuke/data4/exp/attr_vit_l16_rea_256x128_centerLoss_adamw3.5e-5/attr_vit_best.pth")
+    # model_vits = build_attr_vit(619, cfg, 'attr_vit_small_patch16_224_TransReID', stride_size=8, model_path="/home/liyuke/data4/exp/attr_vit_s16_rea_256x128_centerLoss_lr1e-2/attr_vit_best.pth")
     # model_swinb = build_attr_vit(619, cfg, 'swin_base_patch4_window7_224', model_path="/home/liyuke/data4/exp/uavhuman_attr_swin_b16_224_224_adamw_3.5e-5/attr_vit_only_cls_best.pth", img_size=[224,224])
     # model_ibn101a = Backbone('ibnnet101a', 619, cfg, path="/home/liyuke/data4/exp/attr_ibnnet101a_rea_256x128_centerLoss_lr1e-2/ibnnet101a_best.pth")
     
     models = {
-        "vit_s": model_vits,
+        # "vit_s": model_vits,
         "vit_b": model_vitb,
-        "vit_l": model_vitl,
+        "vit_b_pre": model_vitb_pretrained,
+        # "vit_l": model_vitl,
         # "swin_b": model_swinb,
         # "ibn_101a": model_ibn101a,
         }

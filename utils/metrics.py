@@ -81,11 +81,12 @@ def eval_func(distmat, q_pids, g_pids, q_camids, g_camids, max_rank=50, query=No
         print("Note: number of gallery samples is quite small, got {}".format(num_g))
     indices = np.argsort(distmat, axis=1)
 
-    #### reranking with attributes ####
-    hats = np.asarray([h.to('cpu') for h in hats])
-    backpacks = np.asarray([b.to('cpu') for b in backpacks])
-    indices = rerank_with_attr(indices, num_q, hats, backpacks)
-    #### reranking with attributes ####
+    # #### reranking with attributes ####
+    # if hats is not None and backpacks is not None:
+    #     hats = np.asarray([h.to('cpu') for h in hats])
+    #     backpacks = np.asarray([b.to('cpu') for b in backpacks])
+    #     indices = rerank_with_attr(indices, num_q, hats, backpacks)
+    # #### reranking with attributes ####
 
     #  0 2 1 3
     #  1 2 3 0
@@ -363,8 +364,8 @@ class R1_mAP_eval_ensemble():
         self.pids = []
         self.camids = []
         self.resolutions = []
-        self.hat = []
-        self.backpack = []
+        # self.hat = []
+        # self.backpack = []
 
     def update(self, output):  # called once for each batch
         feats, pid, camid, resolutions, attrs = output
@@ -373,8 +374,8 @@ class R1_mAP_eval_ensemble():
         self.pids.extend(np.asarray(pid))
         self.camids.extend(np.asarray(camid))
         self.resolutions.extend(np.asarray(resolutions))
-        self.hat.extend(attrs['hat'])
-        self.backpack.extend(attrs['backpack'])
+        # self.hat.extend(attrs['hat'])
+        # self.backpack.extend(attrs['backpack'])
 
     def compute(self):  # called after each epoch
         # import ipdb
@@ -415,7 +416,7 @@ class R1_mAP_eval_ensemble():
         if self.query_aggregate:
             distmat = query_aggregate(distmat, q_pids, q_resolutions, self.threshold)
             
-        cmc, mAP = eval_func(distmat, q_pids, g_pids, q_camids, g_camids, query=self.query, gallery=self.gallery, log_path=self.log_path,gen_result=self.gen_result, hats=self.hat, backpacks=self.backpack)
+        cmc, mAP = eval_func(distmat, q_pids, g_pids, q_camids, g_camids, query=self.query, gallery=self.gallery, log_path=self.log_path,gen_result=self.gen_result)
 
         return cmc, mAP, distmat, self.pids, self.camids, qf, gf
 

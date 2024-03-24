@@ -490,7 +490,7 @@ class build_vit(nn.Module):
         logger.info("Number of parameter: %.2fM" % (total/1e6))
 
 class build_attr_vit(nn.Module):
-    def __init__(self, num_classes, cfg, model_name=None, pretrain_choice='imagenet', stride_size=16, model_path=None, img_size=None):
+    def __init__(self, num_classes, cfg, model_name=None, pretrain_choice='imagenet', stride_size=16, model_path=None, img_size=None, stem_conv=False):
         super().__init__()
         self.cfg = cfg
         model_path_base = cfg.MODEL.PRETRAIN_PATH
@@ -513,23 +513,14 @@ class build_attr_vit(nn.Module):
         self.num_classes = num_classes
 
         img_size = cfg.INPUT.SIZE_TRAIN if not img_size else img_size
-        if self.pretrain_choice in ['imagenet', 'self']:
-            self.base = factory[model_name]\
-                (img_size=img_size,
-                stride_size=stride_size,
-                drop_path_rate=cfg.MODEL.DROP_PATH,
-                drop_rate= cfg.MODEL.DROP_OUT,
-                attn_drop_rate=cfg.MODEL.ATT_DROP_RATE,
-                has_attr_emb=cfg.MODEL.HAS_ATTRIBUTE_EMBEDDING)
-        elif self.pretrain_choice == 'LUP':
-            self.base = factory[model_name]\
-                (img_size=img_size,
-                stride_size=stride_size,
-                drop_path_rate=cfg.MODEL.DROP_PATH,
-                drop_rate= cfg.MODEL.DROP_OUT,
-                attn_drop_rate=cfg.MODEL.ATT_DROP_RATE,
-                stem_conv=True,
-                has_attr_emb=cfg.MODEL.HAS_ATTRIBUTE_EMBEDDING)
+        self.base = factory[model_name]\
+            (img_size=img_size,
+            stride_size=stride_size,
+            drop_path_rate=cfg.MODEL.DROP_PATH,
+            drop_rate= cfg.MODEL.DROP_OUT,
+            attn_drop_rate=cfg.MODEL.ATT_DROP_RATE,
+            stem_conv=stem_conv,
+            has_attr_emb=cfg.MODEL.HAS_ATTRIBUTE_EMBEDDING)
         # import ipdb; ipdb.set_trace()
         if model_path:
             self.model_path = model_path
@@ -596,7 +587,10 @@ class build_attr_vit(nn.Module):
             #     continue
             if i in self.state_dict().keys():
                 if 'pos_embed' in i and param_dict[i].shape != self.base.pos_embed.shape:
-                    param_dict[i] = self.base.resize_pos_embed(param_dict[i], self.base.pos_embed, self.base.patch_embed.num_y, self.base.patch_embed.num_x, [21, 10] if self.pretrain_choice=='self' else None)
+                    stride = self.cfg.MODEL.STRIDE_SIZE
+                    input_size = self.cfg.INPUT.SIZE_TRAIN
+                    gs_old = [(i - 16) // stride + 1 for i in input_size]
+                    param_dict[i] = self.base.resize_pos_embed(param_dict[i], self.base.pos_embed, self.base.patch_embed.num_y, self.base.patch_embed.num_x, gs_old if self.pretrain_choice=='self' and not self.base.stem_conv else None)
                 self.state_dict()[i].copy_(param_dict[i])
                 count += 1
         print('Loading trained model from {}\n Load {}/{} layers'.format(trained_path, count, len(self.state_dict())))
@@ -975,7 +969,7 @@ def make_model(cfg, modelname, num_class, num_class_domain_wise=None):
         model = build_transformer_local(num_class,cfg,__factory_T_type)
         print('===========building vit with JPM===========')
     elif modelname == 'attr_vit':
-        model = build_attr_vit(num_class, cfg, None, pretrain_choice, cfg.MODEL.STRIDE_SIZE)
+        model = build_attr_vit(num_class, cfg, None, pretrain_choice, cfg.MODEL.STRIDE_SIZE, stem_conv=cfg.MODEL.STEM_CONV)
         print('===========building attr_vit===========')
     elif modelname == 'attr_vit_only_cls':
         model = build_attr_vit_V2(num_class, cfg, __factory_T_type)

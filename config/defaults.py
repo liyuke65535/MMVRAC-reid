@@ -51,6 +51,9 @@ _C.MODEL.NECK = 'bnneck'
 # If train loss include center loss, options: 'yes' or 'no'. Loss with center loss has different optimizer configuration
 _C.MODEL.IF_WITH_CENTER = 'no'
 
+# stem conv like transreid-ssl
+_C.MODEL.STEM_CONV = False
+
 _C.MODEL.ID_LOSS_TYPE = 'softmax'
 _C.MODEL.ID_LOSS_WEIGHT = 1.0
 _C.MODEL.TRIPLET_LOSS_WEIGHT = 1.0
