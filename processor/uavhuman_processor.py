@@ -88,10 +88,8 @@ def attr_vit_do_train_with_amp(cfg,
         
         for n_iter, informations in enumerate(train_loader):
             img = informations['images'].to(device)
-            # img = MixStyle_2d()(img) #### test
             vid = informations['targets'].to(device)
             target_cam = informations['camid'].to(device)
-            # ipath = informations['img_path']
             ori_label = informations['ori_label'].to(device)
 
             # attributes
@@ -142,7 +140,7 @@ def attr_vit_do_train_with_amp(cfg,
                 # target = targets.max(1)[1] ###### for mixup
                 N = feat.shape[0]
                 dist_mat = euclidean_dist(feat, feat)
-                target_new = torch.cat([target,-torch.ones([N-bs], dtype=target.dtype, device=device)], dim=0)
+                target_new = target
                 is_pos = target_new.expand(N, N).eq(target_new.expand(N, N).t())
                 is_neg = target_new.expand(N, N).ne(target_new.expand(N, N).t())
                 dist_ap, relative_p_inds = torch.max(
