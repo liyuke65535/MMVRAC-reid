@@ -13,13 +13,17 @@ bash enviroments.sh
 Note that, all experiments are conducted using single GPU: NVIDIA Titan RTX.
 
 ### 2. training
-Modify the paths and settings in config/uavhuman.yml, then
+We use the model pretrained on Market+DukeMTMC+MSMT17+cuhk02+cuhk03+CUHK-SYSU.
+
+Modify the paths and settings in config/pretrained_vit.yml, then
 
 ```
 python train.py --config_file config/#your_config_name#.yml
 ```
 
 ### 3. evaluation
+We use multiple tricks to re-rank the ranking lists of queries, like re-ranking, rank fusion of multiple models. Besides, we use the setting of multi-shot query images to further improve the performance.
+
 Modify TEST.WEIGHT as your trained model path in config/uavhuman.yml, then
 
 ```
