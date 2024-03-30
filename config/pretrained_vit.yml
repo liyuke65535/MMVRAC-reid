@@ -1,0 +1,92 @@
+MODEL:
+  PRETRAIN_CHOICE: 'self' # imagenet, LUP
+  PRETRAIN_PATH: "/home/liyuke/data5/exp/M+D+MS+C2+C3+CS/vit_best.pth" # root of pretrain path
+  METRIC_LOSS_TYPE: 'triplet_center' # triplet, triplet_center
+  DIM: 768
+  IF_LABELSMOOTH: 'on'
+  NAME: 'attr_vit' # vit, attr_vit, attr_vit_only_cls
+  NO_MARGIN: True
+  DEVICE_ID: ('5')
+  TRANSFORMER_TYPE: 'attr_vit_base_patch16_224_TransReID' # vit_large_patch16_224_TransReID, vit_base_patch16_224_TransReID, vit_base_patch32_224_TransReID, attr_vit_base_patch16_224_TransReID, attr_vit_large_patch16_224_TransReID, swin_base_patch4_window7_224
+  STRIDE_SIZE: 12
+  DROP_PATH: 0.1 ###### avoid overfitting
+  ID_LOSS_WEIGHT: 1.0
+  TRIPLET_LOSS_WEIGHT: 1.0
+  ATTRIBUTE_LOSS_WEIGHT: 1.0
+  # STEM_CONV: True # only true is uses IBN stem conv like transreid-ssl
+  # HAS_ATTRIBUTE_EMBEDDING: True
+  # FREEZE_PATCH_EMBED: True
+  # FIXED_RES_BN: True
+
+INPUT:
+  SIZE_TRAIN: [256,128]
+  # SIZE_TRAIN: [224,224]
+  # SIZE_TRAIN: [384, 192]
+  SIZE_TEST: [256,128]
+  # SIZE_TEST: [224,224]
+  # SIZE_TEST: [384,192]
+  PIXEL_MEAN: [0.5, 0.5, 0.5]
+  PIXEL_STD: [0.5, 0.5, 0.5]
+  REA:
+    ENABLED: True
+  # CJ:
+  #   ENABLED: True
+  # LGT: # Local Grayscale Transfomation
+  #   DO_LGT: True
+  #   PROB: 0.5
+
+DATASETS:
+  TRAIN: ('UAVHuman',)
+  TEST: ('UAVHuman',)
+  ROOT_DIR: ('/home/liyuke/data5') # root of datasets
+
+DATALOADER:
+  SAMPLER: 'softmax_triplet' # softmax_triplet, graph_sampler, single_domain, SHS
+  NUM_INSTANCE: 4
+  NUM_WORKERS: 8
+  CAMERA_TO_DOMAIN: True
+
+SOLVER:
+  OPTIMIZER_NAME: 'SGD' # AdamW, SGD
+  # OPTIMIZER_NAME: 'AdamW' # AdamW, SGD
+  MAX_EPOCHS: 60
+  BASE_LR: 0.01 # 0.0004 for msmt
+  # BASE_LR: 1e-5 # AdamW
+  IMS_PER_BATCH: 64
+  LARGE_FC_LR: False
+  CHECKPOINT_PERIOD: 5
+  LOG_PERIOD: 60 ## 60
+  EVAL_PERIOD: 5
+  WEIGHT_DECAY:  1e-4
+  WEIGHT_DECAY_BIAS: 1e-4
+  BIAS_LR_FACTOR: 2
+  SEED: 1234
+
+TEST:
+  EVAL: True
+  IMS_PER_BATCH: 256
+  RE_RANKING: False
+  QUERY_AGGREGATE: True
+  # WEIGHT: /home/liyuke/data4/exp/uavhuman_attr_vit_b12_256x128_centerLoss_lr1e-2/attr_vit_best.pth
+  # WEIGHT: '/home/liyuke/data4/exp/uavhuman_vit_Large12_rea_256x128_centerLoss_lr1e-3/query_aggregate/vit_best.pth'
+  # WEIGHT: '/home/liyuke/data4/exp/uavhuman_attr_vit_b12_rea_256x128_centerLoss_lr1e-2/query_aggregate/attr_vit_best.pth'
+  NECK_FEAT: 'before'
+  FEAT_NORM: True
+  ATTRIBUTE_RECOGNITION: False
+
+LOG_ROOT: '/home/liyuke/data5/exp/' # root of log file
+TB_LOG_ROOT: './tb_log/'
+
+LOG_NAME: 'attr_vit_pretrained_dirty_images_l12_soft_rea_256x128_centerLoss_lr1e-2'
+# LOG_NAME: 'attr_vit_b12_rea_256x128_centerLoss_lr1e-2_attr_emb'
+# LOG_NAME: 'attr_vit_b10_rea_256x128_centerLoss_lr1e-2'
+# LOG_NAME: 'uavhuman_vit_b12_rea_256x128_centerLoss_lr1e-2/rerank_k1_4_k2_4_lambda_0.45'
+# LOG_NAME: 'uavhuman_vit_lup_b16_rea_256x128_centerLoss_lr1e-3/query_aggregate'
+# LOG_NAME: 'uavhuman_vit_lup_b16_rea_256x128_centerLoss_lr1e-3'
+# LOG_NAME: 'uavhuman_vit_Large12_rea_256x128_centerLoss_lr1e-3'
+# LOG_NAME: 'uavhuman_attr_vit_b12_rea_256x128_centerLoss_lr1e-2/query_aggregate_&_feat_fusion_g_h'
+# LOG_NAME: 'uavhuman_attr_vit_only_cls_token_b12_rea_256x128_centerLoss_lr1e-2/query_aggregate'
+# LOG_NAME: 'vitb12_vitl16_5_5_ensemble_before_aggregate'
+# LOG_NAME: 'uavhuman_attr_swin_b16_224_224_adamw_3.5e-5'
+# LOG_NAME: 'uavhuman_swin_b16_224_224_adamw_3.5e-5'
+# LOG_NAME: 'debug'
