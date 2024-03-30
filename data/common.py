@@ -12,18 +12,13 @@ from .data_utils import read_image
 class CommDataset(Dataset):
     """Image Person ReID Dataset"""
 
-    def __init__(self, cfg, img_items, transform=None, relabel=True, domain_names=None):
+    def __init__(self, cfg, img_items, transform=None, relabel=True, domain_names=None, transform_384=None):
         self.cfg = cfg
         self.img_items = img_items
         self.transform = transform
+        self.transform_384 = transform_384
         self.relabel = relabel
-        # self.mask = cfg.INPUT.MASK.ENABLED ##### add by me
-        # self.mask_ratio = cfg. INPUT.MASK.RATIO ##### add by me
-        # self.mask_generator = RandomMaskingGenerator(cfg, self.mask_ratio) ##### add by me
-        # if cfg.MODEL.NAME == 'local_attention_vit':
-        #     self.mask = True
-        #     part_num = cfg.MODEL.PART_NUM
-        #     self.mask_generator = PartAwareMaskGenerator(cfg, part_num)
+
 
         self.pid_dict = {}
         pids = list()
@@ -47,7 +42,7 @@ class CommDataset(Dataset):
                 for dom in pids_domain_wise:
                     if p in dom:
                         self.pid_dict_domain_wise[p] = dom.index(p)
-        print("A")
+        # print("A")
 
     def __len__(self):
         return len(self.img_items)
@@ -62,22 +57,10 @@ class CommDataset(Dataset):
             others = ''
         ori_img = read_image(img_path)
         h,w = ori_img.size
-        # lab_img = cv2.cvtColor(np.array(ori_img), cv2.COLOR_RGB2LAB) # h,w,c
-        # lab_img = Image.fromarray(lab_img)
-        # # gray_img = cv2.cvtColor(np.array(ori_img), cv2.COLOR_RGB2GRAY) # h,w
-        # gray_img = np.array(lab_img)[:,:,0] # get L -> h,w
-        # gray_img = gray_img[:,:,np.newaxis].repeat(3,axis=-1) # h,w,3
-        # gray_img = Image.fromarray(gray_img) # to PIL.Image
 
-        # rotated_img = None
-        # angle = None
-        # if self.cfg.MODEL.NAME == 'rotate_vit':
-        #     angle, rotated_img = rand_rotate(prob=1.)(ori_img)
-        #     rotated_img = self.transform(rotated_img)
-        if self.transform is not None:
-            img = self.transform(ori_img)
-            # lab_img = self.transform(lab_img)
-            # gray_img = self.transform(gray_img)
+        img = self.transform(ori_img)
+        img_384 = self.transform_384(ori_img)
+
         pid_domain_wise = None
         if self.relabel:
             pid_domain_wise = self.pid_dict_domain_wise[pid]
@@ -85,10 +68,7 @@ class CommDataset(Dataset):
 
         return {
             "images": img,
-            # "lab_images": lab_img,
-            # "gray_images": gray_img,
-            # "rotated_images": rotated_img,
-            # "rotated_labels": angle,
+            "images_384": img_384,
             "targets": pid,
             "camid": camid,
             "img_path": img_path,

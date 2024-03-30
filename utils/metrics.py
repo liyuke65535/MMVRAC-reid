@@ -4,6 +4,8 @@ import torch
 import numpy as np
 import os
 from utils.reranking import re_ranking
+from .rank_cylib.rank_cy import evaluate_cy
+
 import json
 from tqdm import tqdm
 from PIL import Image
@@ -335,7 +337,13 @@ class R1_mAP_eval():
             distmat = euclidean_dist(qf, gf)
         if self.query_aggregate:
             distmat = query_aggregate(distmat, q_pids)
-        cmc, mAP = eval_func(distmat, q_pids, g_pids, q_camids, g_camids, query=self.query, gallery=self.gallery, log_path=self.log_path,gen_result=self.gen_result)
+
+        if True:
+            print("Using cython evaluation (very fast): ")
+            cmc, mAP, mINP = evaluate_cy(distmat, q_pids, g_pids, q_camids, g_camids, 50)
+        else:
+            print("Using python evaluation (relatively slow): ")
+            cmc, mAP = eval_func(distmat, q_pids, g_pids, q_camids, g_camids, query=self.query, gallery=self.gallery, log_path=self.log_path,gen_result=self.gen_result)
 
         return cmc, mAP, distmat, self.pids, self.camids, qf, gf
     
@@ -416,7 +424,12 @@ class R1_mAP_eval_ensemble():
         if self.query_aggregate:
             distmat = query_aggregate(distmat, q_pids, q_resolutions, self.threshold)
             
-        cmc, mAP = eval_func(distmat, q_pids, g_pids, q_camids, g_camids, query=self.query, gallery=self.gallery, log_path=self.log_path,gen_result=self.gen_result)
+        if True:
+            print("Using cython evaluation (very fast): ")
+            cmc, mAP, mINP = evaluate_cy(distmat, q_pids, g_pids, q_camids, g_camids, 50)
+        else:
+            print("Using python evaluation (relatively slow): ")
+            cmc, mAP = eval_func(distmat, q_pids, g_pids, q_camids, g_camids, query=self.query, gallery=self.gallery, log_path=self.log_path,gen_result=self.gen_result)
 
         return cmc, mAP, distmat, self.pids, self.camids, qf, gf
 

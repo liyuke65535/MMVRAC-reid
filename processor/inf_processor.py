@@ -190,7 +190,6 @@ def do_inference_ensemble(cfg,
                  query_aggregate=False,
                  attr_recognition=False,
                  threshold=0,
-                 swin_loader=None,
                 ):
     device = "cuda"
     if iflog:
@@ -218,6 +217,7 @@ def do_inference_ensemble(cfg,
     data_list = []
     for n_iter, informations in enumerate(val_loader):
         img = informations['images']
+        img_384 = informations['images_384']
         pid = informations['targets']
         camids = informations['camid']
         imgpath = informations['img_path']
@@ -227,16 +227,17 @@ def do_inference_ensemble(cfg,
         attrs = informations['others']
         
         data_list.append(informations)
-        for k in attrs.keys():
-            attrs[k] = attrs[k].to(device)
-            attributes.append(attrs[k])
+        if attrs is not None:
+            for k in attrs.keys():
+                attrs[k] = attrs[k].to(device)
+                attributes.append(attrs[k])
         with torch.no_grad():
             img = img.to(device)
-            img_swin = nn.functional.interpolate(img, [224, 224])
+            img_384 = img_384.to(device)
             feats = []
             for name in models.keys():
-                if 'swin' in name:
-                    outputs = models[name](img_swin)
+                if '384' in name:
+                    outputs = models[name](img_384)
                 else:
                     outputs  = models[name](img)
                 if attr_recognition:

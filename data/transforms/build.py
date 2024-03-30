@@ -42,7 +42,7 @@ class Solarization(object):
         else:
             return img
 
-def build_transforms(cfg, is_train=True, is_fake=False):
+def build_transforms(cfg, is_train=True, is_fake=False, size_test=None):
     res = []
 
     if is_train:
@@ -119,7 +119,7 @@ def build_transforms(cfg, is_train=True, is_fake=False):
             from .transforms import mixing_erasing
             res.append(mixing_erasing(probability=rea_prob, mode='pixel', type='soft'))
     else:
-        size_test = cfg.INPUT.SIZE_TEST
+        size_test = size_test if size_test is not None else cfg.INPUT.SIZE_TEST
         res.append(T.Resize(size_test, interpolation=3))
         res.extend([
             T.ToTensor(),

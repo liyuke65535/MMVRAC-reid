@@ -38,7 +38,7 @@ INPUT:
 DATASETS:
   TRAIN: ('UAVHuman',)
   TEST: ('UAVHuman',)
-  ROOT_DIR: ('/home/liyuke/data5') # root of datasets
+  ROOT_DIR: ('/home/liyuke/data5/datasets') # root of datasets
 
 DATALOADER:
   SAMPLER: 'softmax_triplet' # softmax_triplet, graph_sampler, single_domain, SHS

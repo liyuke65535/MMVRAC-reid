@@ -13,7 +13,7 @@ import torchvision.transforms as T
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="ReID Training")
     parser.add_argument(
-        "--config_file", default="./config/test.yml", help="path to config file", type=str
+        "--config_file", default="./config/uavhuman.yml", help="path to config file", type=str
     )
     parser.add_argument("opts", help="Modify config options using the command-line", default=None,
                         nargs=argparse.REMAINDER)
@@ -69,7 +69,7 @@ if __name__ == "__main__":
             models,
             val_loader,
             num_query,
-            reranking=False,
+            reranking=True,
             query_aggregate=True,
             threshold=0,
         )

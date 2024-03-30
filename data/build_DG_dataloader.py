@@ -87,6 +87,7 @@ def build_reid_train_loader(cfg, model=None):
 def build_reid_test_loader(cfg, dataset_name, opt=None, flag_test=True, shuffle=False, only_gallery=False, only_query=False, eval_time=False, bs=None, split_id=None, test_transforms=None):
     if test_transforms is None:
         test_transforms = build_transforms(cfg, is_train=False)
+    test_transform_384 = build_transforms(cfg, is_train=False, size_test=[384,192])
     _root = cfg.DATASETS.ROOT_DIR
     if opt is None:
         if split_id: ### for 4 small target domains only (viper...)
@@ -114,7 +115,7 @@ def build_reid_test_loader(cfg, dataset_name, opt=None, flag_test=True, shuffle=
         test_items = dataset.train
     query = dataset.query
     gallery = dataset.gallery
-    test_set = CommDataset(cfg, test_items, test_transforms, relabel=False)
+    test_set = CommDataset(cfg, test_items, test_transforms, relabel=False, transform_384=test_transform_384)
     batch_size = bs if bs is not None else cfg.TEST.IMS_PER_BATCH
     data_sampler = samplers.InferenceSampler(len(test_set))
     batch_sampler = torch.utils.data.BatchSampler(data_sampler, batch_size, False)
