@@ -53,3 +53,5 @@ As detailed in test_ensemble.py, 5 distinct models are used for the ultimate per
 | 5. 4+dirty samples filtering | 79.5   | 80.6   | 92.6   | 80.05      |
 | 1+2+3+4+5                    | 80.5   | 81.5   | 93.7   | 81.00      |
 | 1+2+3+4+5(re-rank:4,4,0.45)  | **82.2**   | **81.3**   | **93.3**   | **81.75**      |
+
+As for the third one, we mannually select some dirty samples from the train-set (detailed in "old_new_name.json"), you can modify the path in the line 83 of data/datasets/uavhuman.py, then uncomment the codes related to dirty sample filtering and start training.
