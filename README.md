@@ -5,7 +5,7 @@ dataset: [UAVhuman-reid](https://github.com/sutdcv/UAV-Human)
 The ultimate results of our method is 82.2(mAP), 81.3(Rank-1), 93.3(Rank-5).
 
 ### 1. configurations
-First of all, create a conda env, then install packages detailed in enviroments.sh. Be careful with the cuda version of your machine matches the one in enviroments.sh (otherwise modify it into the one compatible with your machine).
+First of all, create a conda env, then install packages detailed in enviroments.sh. Make sure that the cuda version of your machine matches the one in enviroments.sh (otherwise modify it into the one compatible with your machine).
 ```
 conda create -n reid python==3.9
 conda activate reid
