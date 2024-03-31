@@ -52,4 +52,4 @@ As detailed in test_ensemble.py, 5 distinct models are used for the ultimate per
 | 4. 3+soft REA                | 79.0   | 79.1   | 92.6   | 79.05      |
 | 5. 4+dirty samples filtering | 79.5   | 80.6   | 92.6   | 80.05      |
 | 1+2+3+4+5                    | 80.5   | 81.5   | 93.7   | 81.00      |
-| 1+2+3+4+5(re-rank:4,4,0.45)  | 82.2   | 81.3   | 93.3   | 81.75      |
+| 1+2+3+4+5(re-rank:4,4,0.45)  | **82.2**   | **81.3**   | **93.3**   | **81.75**      |
