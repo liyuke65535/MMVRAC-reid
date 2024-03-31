@@ -15,7 +15,7 @@ Note that, all experiments are conducted using single GPU: NVIDIA Titan RTX or A
 ### 2. downloading pretrained model on Market+DukeMTMC+MSMT17+cuhk02+cuhk03+CUHK-SYSU.
 model link: https://drive.google.com/drive/folders/15_afl7WAKBJMuGXQKsVM4VzWrwZcSs7R?usp=sharing
 
-![alt text](image-1.png)
+![error](image-1.png)
 
 The first one is the pretrained model. Others are multiple models trained on uavhuman for ensemble.
 
