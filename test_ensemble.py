@@ -45,7 +45,6 @@ if __name__ == "__main__":
 
     model_vitb = build_attr_vit(619, cfg, 'attr_vit_base_patch16_224_TransReID', stride_size=12, model_path="/home/liyuke/data5/exp/attr_vit_b12_rea_256x128_centerLoss_lr1e-2/attr_vit_best.pth")
     model_vitb_pretrained = build_attr_vit(619, cfg, 'attr_vit_base_patch16_224_TransReID', stride_size=12, model_path="/home/liyuke/data5/exp/attr_vit_multi_source_b12_rea_256x128_centerLoss_lr1e-2/attr_vit_best.pth", pretrain_choice='self')
-    # model_vitb_pretrained_dirt = build_attr_vit(619, cfg, 'attr_vit_base_patch16_224_TransReID', stride_size=12, model_path="/home/liyuke/data5/exp/attr_vit_multi_source_dirty_selected_b12_rea_256x128_centerLoss_lr1e-2/attr_vit_best.pth", pretrain_choice='self')
     model_vitb_pretrained_384 = build_attr_vit(619, cfg, 'attr_vit_base_patch16_224_TransReID', stride_size=12, model_path="/home/liyuke/data5/exp/from_995/attr_vit_pretrained_b12_rea_384x192_centerLoss_lr1e-2/attr_vit_best.pth", pretrain_choice='self', img_size=[384,192])
     model_vitb_pretrained_soft_rea_384 = build_attr_vit(619, cfg, 'attr_vit_base_patch16_224_TransReID', stride_size=12, model_path="/home/liyuke/data5/exp/from_995/attr_vit_pretrained_b12_soft_rea_384x192_centerLoss_lr1e-2/attr_vit_best.pth", pretrain_choice='self', img_size=[384,192])
     model_vitb_pretrained_dirty_soft_rea_384 = build_attr_vit(619, cfg, 'attr_vit_base_patch16_224_TransReID', stride_size=12, model_path="/home/liyuke/data5/exp/from_995/attr_vit_pretrained_dirty_images_b12_soft_rea_384x192_centerLoss_lr1e-2/attr_vit_best.pth", pretrain_choice='self', img_size=[384,192])
@@ -54,10 +53,9 @@ if __name__ == "__main__":
     models = {
         "vit_b": model_vitb, # 1
         "vit_b_pre": model_vitb_pretrained, # 2
-        # "vit_b_pre_dirt": model_vitb_pretrained_dirt, # 3
-        "vit_b_pre_384": model_vitb_pretrained_384, # 4
-        "vit_b_pre_soft_rea_384": model_vitb_pretrained_soft_rea_384, # 5
-        "vit_b_pre_dirt_soft_rea_384": model_vitb_pretrained_dirty_soft_rea_384, # 6
+        "vit_b_pre_384": model_vitb_pretrained_384, # 3
+        "vit_b_pre_soft_rea_384": model_vitb_pretrained_soft_rea_384, # 4
+        "vit_b_pre_dirt_soft_rea_384": model_vitb_pretrained_dirty_soft_rea_384, # 5
         }
 
 
