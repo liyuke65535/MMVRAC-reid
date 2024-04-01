@@ -35,7 +35,7 @@ python train.py --config_file config/#your_config_name#.yml
 ### 4. evaluation
 We use multiple tricks to re-rank the ranking lists of queries, like re-ranking, rank fusion of multiple models. Besides, we use the setting of multi-shot query images to further improve the performance.
 
-Modify the model paths in test_ensemble.py as your trained model path, then
+Download models from Google Drive (or train them by yourself) and modify the model paths in test_ensemble.py as your trained model path, then
 
 ```
 python test_ensemble.py
