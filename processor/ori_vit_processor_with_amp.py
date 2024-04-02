@@ -242,4 +242,4 @@ def ori_vit_do_train_with_amp(cfg,
     else:
         for testname in cfg.DATASETS.TEST:
             _, _, val_loader, num_query = build_reid_test_loader(cfg, testname)
-            do_inference(cfg, model, val_loader, num_query, query_aggregate=cfg.TEST.MULTI_QUERY, reranking=cfg.TEST.RE_RANKING)
+            do_inference(cfg, model, val_loader, num_query, multi_query=cfg.TEST.MULTI_QUERY, reranking=cfg.TEST.RE_RANKING)

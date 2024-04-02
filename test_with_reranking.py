@@ -58,7 +58,7 @@ if __name__ == "__main__":
         do_inference(cfg, model, val_loader, num_query, query=query, gallery=gallery,attr_recognition = cfg.TEST.ATTRIBUTE_RECOGNITION)
         # # with query aggregate
         # logger.info("=== query aggregate ===")
-        # do_inference(cfg,model,val_loader,num_query,query=query,gallery=gallery,query_aggeregate=cfg.TEST.QUERY_AGGREGATE)
+        # do_inference(cfg,model,val_loader,num_query,query=query,gallery=gallery,multi_query=cfg.TEST.QUERY_AGGREGATE)
         # # with reranking
         # logger.info("=== reranking result ===")
         # do_inference(cfg, model, val_loader, num_query, reranking=cfg.TEST.RE_RANKING, query=query, gallery=gallery)

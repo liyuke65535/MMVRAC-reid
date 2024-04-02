@@ -24,7 +24,7 @@ def do_inference(cfg,
                  query=None,
                  gallery=None,
                  gen_result=False,
-                 query_aggregate=False,
+                 multi_query=False,
                  attr_recognition=False,
                 ):
     device = "cuda"
@@ -33,7 +33,7 @@ def do_inference(cfg,
         logger.info("Enter inferencing")
 
     log_path = cfg.LOG_ROOT + cfg.LOG_NAME
-    evaluator = R1_mAP_eval(num_query, max_rank=50, feat_norm=cfg.TEST.FEAT_NORM, reranking = reranking, query = query, gallery = gallery, log_path = log_path, gen_result=gen_result, query_aggregate=query_aggregate)
+    evaluator = R1_mAP_eval(num_query, max_rank=50, feat_norm=cfg.TEST.FEAT_NORM, reranking = reranking, query = query, gallery = gallery, log_path = log_path, gen_result=gen_result, multi_query=multi_query)
 
     evaluator.reset()
 
@@ -187,7 +187,7 @@ def do_inference_ensemble(cfg,
                  query=None,
                  gallery=None,
                  gen_result=False,
-                 query_aggregate=False,
+                 multi_query=False,
                  attr_recognition=False,
                  threshold=0,
                 ):
@@ -197,7 +197,7 @@ def do_inference_ensemble(cfg,
         logger.info("Enter inferencing")
 
     log_path = cfg.LOG_ROOT + cfg.LOG_NAME
-    evaluator = R1_mAP_eval_ensemble(num_query, max_rank=50, feat_norm=cfg.TEST.FEAT_NORM, reranking = reranking, query = query, gallery = gallery, log_path = log_path, gen_result=gen_result, query_aggregate=query_aggregate, num_models=len(models), threshold=threshold)
+    evaluator = R1_mAP_eval_ensemble(num_query, max_rank=50, feat_norm=cfg.TEST.FEAT_NORM, reranking = reranking, query = query, gallery = gallery, log_path = log_path, gen_result=gen_result, multi_query=multi_query, num_models=len(models), threshold=threshold)
 
     evaluator.reset()
 
@@ -284,7 +284,7 @@ def do_inference_ensemble_concat(cfg,
                  query=None,
                  gallery=None,
                  gen_result=False,
-                 query_aggregate=False,
+                 multi_query=False,
                  attr_recognition=False,
                  threshold=0,
                  swin_loader=None,
@@ -295,7 +295,7 @@ def do_inference_ensemble_concat(cfg,
         logger.info("Enter inferencing")
 
     log_path = cfg.LOG_ROOT + cfg.LOG_NAME
-    evaluator = R1_mAP_eval(num_query, max_rank=50, feat_norm=cfg.TEST.FEAT_NORM, reranking = reranking, query = query, gallery = gallery, log_path = log_path, gen_result=gen_result, query_aggregate=query_aggregate)
+    evaluator = R1_mAP_eval(num_query, max_rank=50, feat_norm=cfg.TEST.FEAT_NORM, reranking = reranking, query = query, gallery = gallery, log_path = log_path, gen_result=gen_result, multi_query=multi_query)
 
     evaluator.reset()
 
@@ -386,7 +386,7 @@ def do_inference_feat_fusion(cfg,
         logger.info("Enter inferencing")
 
     log_path = cfg.LOG_ROOT + cfg.LOG_NAME
-    evaluator = R1_mAP_eval(num_query, max_rank=50, feat_norm=cfg.TEST.FEAT_NORM, reranking = reranking, query = query, gallery = gallery, log_path = log_path, gen_result=False, query_aggregate=cfg.TEST.MULTI_QUERY)
+    evaluator = R1_mAP_eval(num_query, max_rank=50, feat_norm=cfg.TEST.FEAT_NORM, reranking = reranking, query = query, gallery = gallery, log_path = log_path, gen_result=False, multi_query=cfg.TEST.MULTI_QUERY)
 
     evaluator.reset()
 

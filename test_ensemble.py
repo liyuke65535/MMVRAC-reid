@@ -68,6 +68,6 @@ if __name__ == "__main__":
             val_loader,
             num_query,
             reranking=True,
-            query_aggregate=True,
+            multi_query=True,
             threshold=0,
         )
