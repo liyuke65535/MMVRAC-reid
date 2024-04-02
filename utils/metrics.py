@@ -288,7 +288,7 @@ def gen_random_case_img(root_dir,file_path,random_AP_indices, all_AP):
 
 
 class R1_mAP_eval():
-    def __init__(self, num_query, max_rank=50,  feat_norm=True, reranking=False, query_aggregate=False, feature_aggregate=False, query=None, gallery=None, log_path=None,gen_result=False):
+    def __init__(self, num_query, max_rank=50,  feat_norm=True, reranking=False, multi_query=False, feature_aggregate=False, query=None, gallery=None, log_path=None,gen_result=False):
         super(R1_mAP_eval, self).__init__()
         self.num_query = num_query
         self.max_rank = max_rank
@@ -299,7 +299,7 @@ class R1_mAP_eval():
         if feat_norm:
             print("The test feature is normalized")
         self.reranking = reranking
-        self.query_aggregate = query_aggregate
+        self.multi_query = multi_query
         self.feature_aggregate = feature_aggregate
         self.gen_result = gen_result
 
@@ -335,8 +335,8 @@ class R1_mAP_eval():
         else:
             # print('=> Computing DistMat with euclidean_distance')
             distmat = euclidean_dist(qf, gf)
-        if self.query_aggregate:
-            distmat = query_aggregate(distmat, q_pids)
+        if self.multi_query:
+            distmat = multi_query(distmat, q_pids)
 
         if True:
             print("Using cython evaluation (very fast): ")
@@ -350,7 +350,7 @@ class R1_mAP_eval():
     
 
 class R1_mAP_eval_ensemble():
-    def __init__(self, num_query, max_rank=50,  feat_norm=True, reranking=False, query_aggregate=False, feature_aggregate=False, query=None, gallery=None, log_path=None,gen_result=False, num_models=1, threshold=0):
+    def __init__(self, num_query, max_rank=50,  feat_norm=True, reranking=False, multi_query=False, feature_aggregate=False, query=None, gallery=None, log_path=None,gen_result=False, num_models=1, threshold=0):
         super(R1_mAP_eval_ensemble, self).__init__()
         self.num_query = num_query
         self.max_rank = max_rank
@@ -361,7 +361,7 @@ class R1_mAP_eval_ensemble():
         if feat_norm:
             print("The test feature is normalized")
         self.reranking = reranking
-        self.query_aggregate = query_aggregate
+        self.multi_query = multi_query
         self.feature_aggregate = feature_aggregate
         self.gen_result = gen_result
         self.num_models = num_models
@@ -421,8 +421,8 @@ class R1_mAP_eval_ensemble():
         # distmat = 0.2*distmats[0] + 0.6*distmats[1] + 0.2*distmats[2]
         
         
-        if self.query_aggregate:
-            distmat = query_aggregate(distmat, q_pids, q_resolutions, self.threshold)
+        if self.multi_query:
+            distmat = multi_query(distmat, q_pids, q_resolutions, self.threshold)
             
         if True:
             print("Using cython evaluation (very fast): ")
@@ -434,7 +434,7 @@ class R1_mAP_eval_ensemble():
         return cmc, mAP, distmat, self.pids, self.camids, qf, gf
 
 
-def query_aggregate(distmat, q_pids, resolution=None, threshold=0):
+def multi_query(distmat, q_pids, resolution=None, threshold=0):
     print('=> Enter query aggregation')
     if threshold > 0 and resolution is not None:
         low_res_inds = np.argwhere(np.array(resolution) < threshold).squeeze()

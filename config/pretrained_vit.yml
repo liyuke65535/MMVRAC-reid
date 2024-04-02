@@ -66,7 +66,7 @@ TEST:
   EVAL: True
   IMS_PER_BATCH: 256
   RE_RANKING: False
-  QUERY_AGGREGATE: True
+  MULTI_QUERY: True
   # WEIGHT: /home/liyuke/data4/exp/uavhuman_attr_vit_b12_256x128_centerLoss_lr1e-2/attr_vit_best.pth
   # WEIGHT: '/home/liyuke/data4/exp/uavhuman_vit_Large12_rea_256x128_centerLoss_lr1e-3/query_aggregate/vit_best.pth'
   # WEIGHT: '/home/liyuke/data4/exp/uavhuman_attr_vit_b12_rea_256x128_centerLoss_lr1e-2/query_aggregate/attr_vit_best.pth'

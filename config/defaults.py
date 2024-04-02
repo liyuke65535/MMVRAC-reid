@@ -321,7 +321,7 @@ _C.TEST.IMS_PER_BATCH = 128
 # If test with re-ranking, options: 'True','False'
 _C.TEST.RE_RANKING = False
 # If test with query aggregation, options: 'True','False'
-_C.TEST.QUERY_AGGREGATE = False
+_C.TEST.MULTI_QUERY = False
 # Path to trained model
 _C.TEST.WEIGHT = ""
 # Which feature of BNNeck to be used for test, before or after BNNneck, options: 'before' or 'after'
