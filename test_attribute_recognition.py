@@ -2,7 +2,7 @@ import os
 from config import cfg
 import argparse
 from data.build_DG_dataloader import build_reid_test_loader
-from model.make_model_only_attr import make_model
+from model.make_model import make_model
 # from model import make_model
 from processor.inf_processor import do_inference_only_attr
 from utils.logger import setup_logger
@@ -11,7 +11,7 @@ from utils.logger import setup_logger
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="ReID Training")
     parser.add_argument(
-        "--config_file", default="./config/test.yml", help="path to config file", type=str
+        "--config_file", default="./config/pretrained_vit.yml", help="path to config file", type=str
     )
     parser.add_argument("opts", help="Modify config options using the command-line", default=None,
                         nargs=argparse.REMAINDER)
