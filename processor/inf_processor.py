@@ -184,9 +184,10 @@ def do_inference_only_attr(cfg,
     # if want to get attribute recognition wrong result, set "gen_attr_result = True"
     accuracy_per_attribute = Attribute_Recognition(cfg,attributes,attr_classes,data_list,gen_attr_reslut = False)
     logger.info("Validation Results ")
-    table = PrettyTable(["task", "gender", "backpack", "hat", "upper_color", "upper_style","lower_color",'lower_style'])
+    table = PrettyTable(["task", "gender", "backpack", "hat", "upper_color", "upper_style","lower_color",'lower_style', 'avg'])
     formatted_accuracy_per_attribute = ["{:.2%}".format(accuracy) for accuracy in accuracy_per_attribute]
-    table.add_row(["Attribute Recognition"] + formatted_accuracy_per_attribute)
+    avg_acc = sum(formatted_accuracy_per_attribute) / len(formatted_accuracy_per_attribute)
+    table.add_row(["Attribute Recognition"] + formatted_accuracy_per_attribute + [avg_acc])
     logger.info('\n' + str(table))
     logger.info("=====attribute recognition accuracy: {:.2%}=====".format(sum(accuracy_per_attribute)))
 
