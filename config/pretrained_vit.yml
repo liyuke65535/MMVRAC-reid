@@ -37,7 +37,7 @@ INPUT:
 
 DATASETS:
   TRAIN: ('UAVHuman',)
-  TEST: ('Market1501',)
+  TEST: ('UAVHuman',)
   ROOT_DIR: ('/home/liyuke/data5/datasets') # root of datasets
 
 DATALOADER:
@@ -77,7 +77,7 @@ TEST:
 LOG_ROOT: '/home/liyuke/data5/exp/' # root of log file
 TB_LOG_ROOT: './tb_log/'
 
-LOG_NAME: 'attr_vit_market_test'
+LOG_NAME: 'attr_vit_uavhuman_attrs'
 # LOG_NAME: 'attr_vit_b12_rea_256x128_centerLoss_lr1e-2_attr_emb'
 # LOG_NAME: 'attr_vit_b10_rea_256x128_centerLoss_lr1e-2'
 # LOG_NAME: 'uavhuman_vit_b12_rea_256x128_centerLoss_lr1e-2/rerank_k1_4_k2_4_lambda_0.45'

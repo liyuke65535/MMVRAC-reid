@@ -136,15 +136,16 @@ def do_inference_only_attr(cfg,
     attributes = []
     attr_classes = []
     data_list = []
+    save_data = []
     for n_iter, informations in enumerate(val_loader):
         img = informations['images']
         attrs = informations['others']
         paths = informations['img_path']
-        
+        # import ipdb; ipdb.set_trace()
         data_list.append(informations)
-        # for k in attrs.keys():
-        #     attrs[k] = attrs[k].to(device)
-        #     attributes.append(attrs[k])
+        for k in attrs.keys():
+            attrs[k] = attrs[k].to(device)
+            attributes.append(attrs[k])
         with torch.no_grad():
             img = img.to(device)
             outputs  = model(img, attr_recognition)
@@ -157,39 +158,48 @@ def do_inference_only_attr(cfg,
             else:
                 feat = outputs
 
-    load_data = []
-    for (path,pre_label) in zip(paths,attr_classes):
-        data = {
-            "file_path":"",
-            "pre_label":"",
+        # import ipdb; ipdb.set_trace()
+        for i in range(img.shape[0]):
+            data = {}
+            data['file_path'] = paths[i]
+            data['attrs'] = {
+                "gender": attr_dicts[0][attr_classes[0][i]],
+                "backpack": attr_dicts[1][attr_classes[1][i]],
+                "hat": attr_dicts[2][attr_classes[2][i]],
+                "ucc": attr_dicts[3][attr_classes[3][i]],
+                "ucs": attr_dicts[4][attr_classes[4][i]],
+                "lcc": attr_dicts[5][attr_classes[5][i]],
+                "lcs": attr_dicts[6][attr_classes[6][i]],
             }
-        data["file_path"] = path
-        data['pre_label'] = pre_label
-        load_data.append(data)
+            save_data.append(data)
     save_folder = cfg.LOG_ROOT + cfg.LOG_NAME + f"/attr_res.json"
     with open(save_folder,'w') as f:
-        json.dump(load_data,f)
+        # json.dump(save_data, f)
+        for obj in save_data:
+            f.write(json.dumps(obj)+'\n')
+            f.flush()
+    logger.info("save attribute results in {}".format(save_folder))
     
-    # total_f_time = time.time() - t0
-    # # if want to get attribute recognition wrong result, set "gen_attr_result = True"
-    # accuracy_per_attribute = Attribute_Recognition(cfg,attributes,attr_classes,data_list,gen_attr_reslut = True)
-    # logger.info("Validation Results ")
-    # table = PrettyTable(["task", "gender", "backpack", "hat", "upper_color", "upper_style","lower_color",'lower_style'])
-    # formatted_accuracy_per_attribute = ["{:.2%}".format(accuracy) for accuracy in accuracy_per_attribute]
-    # table.add_row(["Attribute Recognition"] + formatted_accuracy_per_attribute)
-    # logger.info('\n' + str(table))
-    # logger.info("=====attribute recognition accuracy: {:.2%}=====".format(sum(accuracy_per_attribute)))
+    total_f_time = time.time() - t0
+    # if want to get attribute recognition wrong result, set "gen_attr_result = True"
+    accuracy_per_attribute = Attribute_Recognition(cfg,attributes,attr_classes,data_list,gen_attr_reslut = False)
+    logger.info("Validation Results ")
+    table = PrettyTable(["task", "gender", "backpack", "hat", "upper_color", "upper_style","lower_color",'lower_style'])
+    formatted_accuracy_per_attribute = ["{:.2%}".format(accuracy) for accuracy in accuracy_per_attribute]
+    table.add_row(["Attribute Recognition"] + formatted_accuracy_per_attribute)
+    logger.info('\n' + str(table))
+    logger.info("=====attribute recognition accuracy: {:.2%}=====".format(sum(accuracy_per_attribute)))
 
     
-    # single_f_time = total_f_time / (len(val_loader) * img.shape[0])
-    # num_imgs_per_sec = (len(val_loader) * img.shape[0]) / total_f_time
-    # if iflog:
-    #     logger.info("Total feature time: {:.2f}s".format(total_f_time))
-    #     logger.info("single feature time: {:.5f}s".format(single_f_time))
-    #     logger.info("number of images per sec: {:.2f}img/s".format(num_imgs_per_sec))
-    #     logger.info("total inference time: {:.2f}".format(time.time() - t0))
+    single_f_time = total_f_time / (len(val_loader) * img.shape[0])
+    num_imgs_per_sec = (len(val_loader) * img.shape[0]) / total_f_time
+    if iflog:
+        logger.info("Total feature time: {:.2f}s".format(total_f_time))
+        logger.info("single feature time: {:.5f}s".format(single_f_time))
+        logger.info("number of images per sec: {:.2f}img/s".format(num_imgs_per_sec))
+        logger.info("total inference time: {:.2f}".format(time.time() - t0))
 
-    return None
+    return accuracy_per_attribute
 
 
 def do_inference_ensemble(cfg,
@@ -481,3 +491,16 @@ def do_inference_multi_targets(cfg,
             logger.info("CMC curve, Rank-{:<3}:{:.1%}".format(r, cmc_all[r - 1] / len(cfg.DATASETS.TEST)))
 
     return cmc_all, mAP_all
+
+
+
+
+attr_dicts = [
+    {0: 'male', 1: 'female'}, # gender
+    {0:'n/a', 1:'red', 2:'black', 3:'green', 4:'yellow'}, # backpack
+    {0:'n/a', 1:'red', 2:'black', 3:'yellow', 4:'white'}, # hat
+    {0:'n/a', 1:'red', 2:'black', 3:'blue', 4:'green', 5:'multicolor', 6:'grey', 7:'white', 8:'yellow', 9:'dark brown', 10:'purple', 11:'pink'}, # ucc
+    {0:'n/a', 1:'long', 2:'short', 3:'skirt'}, # ucs
+    {0:'n/a', 1:'red', 2:'black', 3:'blue', 4:'green', 5:'multicolor', 6:'grey', 7:'white', 8:'yellow', 9:'dark brown', 10:'purple', 11:'pink'}, # lcc
+    {0:'n/a', 1:'long', 2:'short', 3:'skirt'}, # lcs
+]
