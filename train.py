@@ -77,9 +77,9 @@ if __name__ == '__main__':
 
     os.environ['CUDA_VISIBLE_DEVICES'] = cfg.MODEL.DEVICE_ID
 
-    model = make_model(cfg, cfg.MODEL.NAME, 619) ## uavhuman 619
+    train_loader, num_domains, num_pids = build_reid_train_loader(cfg)
+    model = make_model(cfg, cfg.MODEL.NAME, num_pids) ## uavhuman 619
     # build DG train loader
-    train_loader, num_domains, num_pids = build_reid_train_loader(cfg, model)
     cfg.defrost()
     cfg.DATASETS.NUM_DOMAINS = num_domains
     cfg.freeze()

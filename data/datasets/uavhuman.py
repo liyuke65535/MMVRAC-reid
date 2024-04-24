@@ -48,7 +48,7 @@ class UAVHuman(ImageDataset):
         #     """
             
         #     self.print_dataset_statistics_for_train_only(train)
-
+        # train = train + query + gallery
         self.train = train
         
         # """Comment for Competition Splits
@@ -89,6 +89,7 @@ class UAVHuman(ImageDataset):
 
         # pid and camid patterns
         pattern_pid = re.compile(r'P([-\d]+)S([-\d]+)')
+        pattern_pid_distract = re.compile(r'D([-\d]+)S([-\d]+)')
         pattern_camid = re.compile(r'A([-\d]+)R([-\d])_([-\d]+)_([-\d]+)')
 
         # attributes patterns
@@ -137,6 +138,10 @@ class UAVHuman(ImageDataset):
                 # continue
                 pid = int(distractor_pid)
                 camid = int(fname[-13:-8])
+
+                # ##### for adding distractors into training
+                # pid_part1, pid_part2 = pattern_pid_distract.search(fname).groups()
+                # pid = int(pid_part1 + pid_part2)
             # elif fname in dirty_imgs.keys():
             #     if dirty_imgs[fname] == "":
             #         continue

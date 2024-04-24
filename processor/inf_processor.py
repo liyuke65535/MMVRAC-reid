@@ -162,6 +162,15 @@ def do_inference_only_attr(cfg,
         for i in range(img.shape[0]):
             data = {}
             data['file_path'] = paths[i]
+            data['attrs_cls'] = {
+                "gender": attr_classes[0][i],
+                "backpack": attr_classes[1][i],
+                "hat": attr_classes[2][i],
+                "ucc": attr_classes[3][i],
+                "ucs": attr_classes[4][i],
+                "lcc": attr_classes[5][i],
+                "lcs": attr_classes[6][i],
+            }
             data['attrs'] = {
                 "gender": attr_dicts[0][attr_classes[0][i]],
                 "backpack": attr_dicts[1][attr_classes[1][i]],

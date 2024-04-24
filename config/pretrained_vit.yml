@@ -37,7 +37,7 @@ INPUT:
 
 DATASETS:
   TRAIN: ('UAVHuman',)
-  TEST: ('UAVHuman',)
+  TEST: ('Market1501',)
   ROOT_DIR: ('/home/liyuke/data5/datasets') # root of datasets
 
 DATALOADER:
@@ -69,7 +69,7 @@ TEST:
   MULTI_QUERY: True
   # WEIGHT: /home/liyuke/data4/exp/uavhuman_attr_vit_b12_256x128_centerLoss_lr1e-2/attr_vit_best.pth
   # WEIGHT: '/home/liyuke/data4/exp/uavhuman_vit_Large12_rea_256x128_centerLoss_lr1e-3/query_aggregate/vit_best.pth'
-  WEIGHT: '/home/liyuke/data5/exp/attr_vit_multi_source_b12_rea_256x128_centerLoss_lr1e-2/attr_vit_best.pth'
+  WEIGHT: '/home/liyuke/data5/exp/attr_vit_pretrained_b12_rea_256x128_centerLoss_lr1e-2_all_data_uavhuman/attr_vit_best.pth'
   NECK_FEAT: 'before'
   FEAT_NORM: True
   ATTRIBUTE_RECOGNITION: False
@@ -77,9 +77,9 @@ TEST:
 LOG_ROOT: '/home/liyuke/data5/exp/' # root of log file
 TB_LOG_ROOT: './tb_log/'
 
-LOG_NAME: 'attr_vit_uavhuman_attrs'
+LOG_NAME: 'attr_vit_market_attrs'
 # LOG_NAME: 'attr_vit_b12_rea_256x128_centerLoss_lr1e-2_attr_emb'
-# LOG_NAME: 'attr_vit_b10_rea_256x128_centerLoss_lr1e-2'
+# LOG_NAME: 'attr_vit_pretrained_b12_rea_256x128_centerLoss_lr1e-2_all_data_uavhuman'
 # LOG_NAME: 'uavhuman_vit_b12_rea_256x128_centerLoss_lr1e-2/rerank_k1_4_k2_4_lambda_0.45'
 # LOG_NAME: 'uavhuman_vit_lup_b16_rea_256x128_centerLoss_lr1e-3/query_aggregate'
 # LOG_NAME: 'uavhuman_vit_lup_b16_rea_256x128_centerLoss_lr1e-3'

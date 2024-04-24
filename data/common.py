@@ -26,8 +26,8 @@ class CommDataset(Dataset):
             if item[1] in pids: continue
             pids.append(item[1])
         self.pids = pids
-        if self.relabel:
-            self.pid_dict = dict([(p, i) for i, p in enumerate(self.pids)])
+        # if self.relabel:
+        self.pid_dict = dict([(p, i) for i, p in enumerate(self.pids)])
 
         if domain_names is None: return
 
@@ -59,12 +59,15 @@ class CommDataset(Dataset):
         h,w = ori_img.size
 
         img = self.transform(ori_img)
-        img_384 = self.transform_384(ori_img)
+        if self.transform_384 is not None:
+            img_384 = self.transform_384(ori_img)
+        else:
+            img_384 = None
 
         pid_domain_wise = None
         if self.relabel:
             pid_domain_wise = self.pid_dict_domain_wise[pid]
-            pid = self.pid_dict[pid]
+        pid = self.pid_dict[pid]
 
         return {
             "images": img,
