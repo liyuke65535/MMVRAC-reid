@@ -1,3 +1,10 @@
+# News 📢📢📢
+We have won the **1st** place in ReID track.
+![error](certificate.png)
+
+\[📢 [Paper: ICMEW 2024](https://ieeexplore.ieee.org/abstract/document/10645408)] \[📢 [Poster](https://drive.google.com/drive/folders/1cghmHe01DjCr7SlSHW1g-9EnBFIfNPSO)]
+
+
 ## [2024 ICME Grand Challenge: Multi-Modal Video Reasoning and Analyzing Competition (MMVRAC)](https://sutdcv.github.io/MMVRAC/)
 
 dataset: [UAVhuman-reid](https://github.com/sutdcv/UAV-Human)
